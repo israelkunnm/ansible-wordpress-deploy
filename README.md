@@ -40,20 +40,7 @@ Responsável pelo armazenamento de dados:
 ## Arquitetura simplificada
 
 
-Ansible Control Node
-│
-▼
-┌─────────────────────┐
-│ Web Server │
-│ Apache │
-│ WordPress │
-└──────────┬──────────┘
-│ conexão MySQL
-▼
-┌─────────────────────┐
-│ Database Server │
-│ MySQL │
-└─────────────────────┘
+Ansible Control Node |  MySQL │--->|  Web Server │  Apache │ WordPress │---conexão MySQL--->| Database Server │ MySQL |
 
 
 O **Ansible Control Node** executa os playbooks e configura remotamente os servidores através de **SSH**.
