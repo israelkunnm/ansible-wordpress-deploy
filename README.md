@@ -183,10 +183,11 @@ Exemplo:
 
 ```
 [wordpress]
-webserver ansible_host=IP_DO_SERVIDOR_WEB ansible_user=ubuntu
+server_ip ansible_user=user ansible_ssh_private_key_file='path_private_key'
 
 [mysql]
-dbserver ansible_host=IP_DO_SERVIDOR_DB ansible_user=ubuntu
+server_ip ansible_user=user ansible_ssh_private_key_file='path_private_key'
+
 ```
 
 ---
