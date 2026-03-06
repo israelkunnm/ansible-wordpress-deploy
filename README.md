@@ -55,30 +55,30 @@ A separação entre servidor web e banco de dados segue boas práticas de arquit
 
 # 📂 Estrutura do projeto
 
-
+```
 .
 ├── group_vars
-│ ├── all.example.yml
-│ ├── mysql.yml
-│ └── wordpress.yml
+│   ├── all.example.yml
+│   ├── mysql.yml
+│   └── wordpress.yml
 ├── roles
-│ ├── apache
-│ │ └── tasks
-│ │ └── main.yml
-│ ├── mysql
-│ │ ├── handlers
-│ │ │ └── main.yml
-│ │ └── tasks
-│ │ └── main.yml
-│ └── wordpress
-│ ├── handlers
-│ │ └── main.yml
-│ ├── meta
-│ │ └── main.yml
-│ └── tasks
-│ └── main.yml
+│   ├── apache
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── mysql
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   └── tasks
+│   │       └── main.yml
+│   └── wordpress
+│       ├── handlers
+│       │   └── main.yml
+│       ├── meta
+│       │   └── main.yml
+│       └── tasks
+│           └── main.yml
 ├── templates
-│ └── wordpress.conf.j2
+│   └── wordpress.conf.j2
 ├── hosts
 ├── playbook.yml
 └── README.md
