@@ -66,6 +66,24 @@ A separação entre servidor web e banco de dados segue boas práticas de arquit
 
 ---
 
+# 📷 Demonstração
+
+### Execução do playbook Ansible
+
+Resultado da execução do playbook com deploy automatizado da infraestrutura.
+
+![Execução do Ansible](screenshots/ansible-play-recap.png)
+
+---
+
+### WordPress rodando após deploy
+
+Interface do WordPress funcionando após configuração automática realizada pelo Ansible.
+
+![WordPress rodando](screenshots/wordpress-running.png)
+
+---
+
 # 📂 Estrutura do projeto
 
 ```
