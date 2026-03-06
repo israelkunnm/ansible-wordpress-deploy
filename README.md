@@ -39,9 +39,22 @@ Responsável pelo armazenamento de dados:
 
 ## Arquitetura simplificada
 
-
-Ansible Control Node |  MySQL │--->|  Web Server │  Apache │ WordPress │---conexão MySQL--->| Database Server │ MySQL |
-
+```
+Ansible Control Node
+        │
+        ▼
+┌─────────────────────┐
+│ Web Server          │
+│ Apache              │
+│ WordPress           │
+└──────────┬──────────┘
+           │ conexão MySQL
+           ▼
+┌─────────────────────┐
+│ Database Server     │
+│ MySQL               │
+└─────────────────────┘
+```
 
 O **Ansible Control Node** executa os playbooks e configura remotamente os servidores através de **SSH**.
 
@@ -82,7 +95,7 @@ A separação entre servidor web e banco de dados segue boas práticas de arquit
 ├── hosts
 ├── playbook.yml
 └── README.md
-
+```
 
 ### Descrição
 
@@ -121,21 +134,24 @@ Playbook principal responsável por executar toda a automação.
 
 Ubuntu / Debian
 
-
+```
 sudo apt update
 sudo apt install ansible -y
-
+```
 
 ---
 
 ## 2️⃣ Configurar o inventário
 
+Editar o arquivo `hosts`:
+
+```
 [wordpress]
 IP_DO_SERVIDOR_WEB ansible_user=ubuntu
 
 [mysql]
 IP_DO_SERVIDOR_DB ansible_user=ubuntu
-
+```
 
 ---
 
@@ -143,23 +159,23 @@ IP_DO_SERVIDOR_DB ansible_user=ubuntu
 
 Foi incluído um arquivo de exemplo:
 
-
+```
 group_vars/all.example.yml
-
+```
 
 Crie o arquivo real baseado nele:
 
-
+```
 cp group_vars/all.example.yml group_vars/all.yml
-
+```
 
 ---
 
 ## 4️⃣ Executar o playbook
 
-
-ansible-playbook -i hosts playbook.yml
-
+```
+ansible-playbook playbook.yml -i hosts -K
+```
 
 O Ansible irá automaticamente:
 
@@ -178,9 +194,9 @@ Arquivos contendo **dados sensíveis**, como senhas ou credenciais, foram removi
 
 Para execução do projeto, utilize o arquivo:
 
-
+```
 group_vars/all.example.yml
-
+```
 
 Criando sua própria versão local com as credenciais necessárias.
 
