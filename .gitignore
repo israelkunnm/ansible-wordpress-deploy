@@ -1,0 +1,14 @@
+# ssh keys
+*.pem
+*.key
+mysql
+server
+wordpress
+
+# ansible
+*.retry
+
+# secrets
+.env
+secrets.yml
+group_vars/all.yml
