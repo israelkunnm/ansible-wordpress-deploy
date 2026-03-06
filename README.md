@@ -12,6 +12,7 @@ Automatizar a configuração completa de um ambiente WordPress utilizando Ansibl
 
 - Instalação e configuração do Apache
 - Instalação e configuração do MySQL
+- Instalação do PHP e dependências
 - Deploy automatizado do WordPress
 - Configuração de VirtualHost
 - Separação de serviços entre servidores
@@ -27,6 +28,7 @@ A infraestrutura deste projeto é composta por **dois servidores Linux**, separa
 Responsável por hospedar a aplicação:
 
 - Apache
+- PHP
 - WordPress
 
 ### Servidor de Banco de Dados
@@ -40,20 +42,20 @@ Responsável pelo armazenamento de dados:
 ## Arquitetura simplificada
 
 ```
-Ansible Control Node
-        │
-        ▼
-┌─────────────────────┐
-│ Web Server          │
-│ Apache              │
-│ WordPress           │
-└──────────┬──────────┘
-           │ conexão MySQL
-           ▼
-┌─────────────────────┐
-│ Database Server     │
-│ MySQL               │
-└─────────────────────┘
+           Ansible Control Node
+                    │
+                    ▼
+        ┌────────────────────┐
+        │ Web Server         │
+        │ Apache + WordPress │
+        │ PHP                │
+        └─────────┬──────────┘
+                  │ MySQL connection
+                  ▼
+        ┌────────────────────┐
+        │ Database Server    │
+        │ MySQL              │
+        └────────────────────┘
 ```
 
 O **Ansible Control Node** executa os playbooks e configura remotamente os servidores através de **SSH**.
@@ -84,10 +86,28 @@ Interface do WordPress funcionando após configuração automática realizada pe
 
 ---
 
+# ⚙️ Fluxo de execução do playbook
+
+Ao executar o playbook principal, o Ansible realiza as seguintes etapas:
+
+1. Provisiona o **servidor de banco de dados**
+2. Instala e configura o **MySQL**
+3. Cria o banco de dados e usuário do WordPress
+4. Provisiona o **servidor web**
+5. Instala **Apache e PHP**
+6. Faz download e instalação do **WordPress**
+7. Configura o **VirtualHost do Apache**
+8. Conecta o WordPress ao banco de dados remoto
+
+---
+
 # 📂 Estrutura do projeto
 
 ```
 .
+├── screenshots
+│   ├── ansible-play-recap.png
+│   └── wordpress-running.png
 ├── group_vars
 │   ├── all.example.yml
 │   ├── mysql.yml
@@ -124,7 +144,7 @@ Organização modular das tarefas do Ansible.
 Variáveis utilizadas na configuração dos servidores.
 
 **templates/**  
-Templates utilizados para gerar arquivos de configuração dinamicamente.
+Templates Jinja2 utilizados para gerar arquivos de configuração dinamicamente.
 
 **hosts**  
 Arquivo de inventário contendo os servidores gerenciados pelo Ansible.
@@ -140,6 +160,7 @@ Playbook principal responsável por executar toda a automação.
 - Ansible
 - Apache
 - MySQL
+- PHP
 - WordPress
 - SSH
 - Infrastructure as Code (IaC)
@@ -161,14 +182,16 @@ sudo apt install ansible -y
 
 ## 2️⃣ Configurar o inventário
 
-Editar o arquivo `hosts`:
+Editar o arquivo `hosts`.
+
+Exemplo:
 
 ```
 [wordpress]
-IP_DO_SERVIDOR_WEB ansible_user=ubuntu
+webserver ansible_host=IP_DO_SERVIDOR_WEB ansible_user=ubuntu
 
 [mysql]
-IP_DO_SERVIDOR_DB ansible_user=ubuntu
+dbserver ansible_host=IP_DO_SERVIDOR_DB ansible_user=ubuntu
 ```
 
 ---
@@ -192,12 +215,13 @@ cp group_vars/all.example.yml group_vars/all.yml
 ## 4️⃣ Executar o playbook
 
 ```
-ansible-playbook playbook.yml -i hosts -K
+ansible-playbook -i hosts playbook.yml
 ```
 
 O Ansible irá automaticamente:
 
 - instalar Apache
+- instalar PHP
 - instalar MySQL
 - criar banco de dados
 - instalar WordPress
@@ -230,6 +254,7 @@ Este projeto demonstra conhecimentos em:
 - Uso de **templates Jinja2**
 - Configuração automatizada de aplicações
 - Infrastructure as Code
+- Deploy automatizado de aplicações web
 
 ---
 
