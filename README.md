@@ -1,19 +1,122 @@
-# Ansible - Deploy de WordPress com Infraestrutura como Código
+# 🚀 Ansible WordPress Deployment
 
-Projeto desenvolvido durante os estudos do curso  
-**"Ansible: implementando sua infraestrutura como código" da Alura.**
+Projeto de **Infraestrutura como Código (IaC)** utilizando **Ansible** para provisionar automaticamente um ambiente WordPress em servidores Linux.
 
-O objetivo do projeto é automatizar a configuração de servidores Linux utilizando **Ansible**, provisionando um ambiente completo com:
-
-- Servidor Web (Apache)
-- Banco de dados (MySQL)
-- Aplicação WordPress
-
-Toda a configuração da infraestrutura é feita utilizando **playbooks, roles, variáveis e templates**, seguindo o conceito de **Infraestrutura como Código (IaC)**.
+Este projeto demonstra automação de infraestrutura utilizando **Ansible Playbooks, Roles e Templates**, aplicando boas práticas de organização e separação de serviços.
 
 ---
 
-# Tecnologias utilizadas
+# 📌 Objetivo do projeto
+
+Automatizar a configuração completa de um ambiente WordPress utilizando Ansible, incluindo:
+
+- Instalação e configuração do Apache
+- Instalação e configuração do MySQL
+- Deploy automatizado do WordPress
+- Configuração de VirtualHost
+- Separação de serviços entre servidores
+
+---
+
+# 🧱 Arquitetura da infraestrutura
+
+A infraestrutura deste projeto é composta por **dois servidores Linux**, separados por função.
+
+### Servidor Web
+
+Responsável por hospedar a aplicação:
+
+- Apache
+- WordPress
+
+### Servidor de Banco de Dados
+
+Responsável pelo armazenamento de dados:
+
+- MySQL
+
+---
+
+## Arquitetura simplificada
+
+
+Ansible Control Node
+│
+▼
+┌─────────────────────┐
+│ Web Server │
+│ Apache │
+│ WordPress │
+└──────────┬──────────┘
+│ conexão MySQL
+▼
+┌─────────────────────┐
+│ Database Server │
+│ MySQL │
+└─────────────────────┘
+
+
+O **Ansible Control Node** executa os playbooks e configura remotamente os servidores através de **SSH**.
+
+A separação entre servidor web e banco de dados segue boas práticas de arquitetura, permitindo:
+
+- maior segurança
+- isolamento de serviços
+- maior escalabilidade da aplicação
+
+---
+
+# 📂 Estrutura do projeto
+
+
+.
+├── group_vars
+│ ├── all.example.yml
+│ ├── mysql.yml
+│ └── wordpress.yml
+├── roles
+│ ├── apache
+│ │ └── tasks
+│ │ └── main.yml
+│ ├── mysql
+│ │ ├── handlers
+│ │ │ └── main.yml
+│ │ └── tasks
+│ │ └── main.yml
+│ └── wordpress
+│ ├── handlers
+│ │ └── main.yml
+│ ├── meta
+│ │ └── main.yml
+│ └── tasks
+│ └── main.yml
+├── templates
+│ └── wordpress.conf.j2
+├── hosts
+├── playbook.yml
+└── README.md
+
+
+### Descrição
+
+**roles/**  
+Organização modular das tarefas do Ansible.
+
+**group_vars/**  
+Variáveis utilizadas na configuração dos servidores.
+
+**templates/**  
+Templates utilizados para gerar arquivos de configuração dinamicamente.
+
+**hosts**  
+Arquivo de inventário contendo os servidores gerenciados pelo Ansible.
+
+**playbook.yml**  
+Playbook principal responsável por executar toda a automação.
+
+---
+
+# ⚙️ Tecnologias utilizadas
 
 - Linux
 - Ansible
@@ -21,73 +124,96 @@ Toda a configuração da infraestrutura é feita utilizando **playbooks, roles, 
 - MySQL
 - WordPress
 - SSH
+- Infrastructure as Code (IaC)
 
 ---
 
-# Estrutura do projeto
+# ▶️ Como executar o projeto
 
-├── playbook.yml
-├── hosts
-├── group_vars
-├── roles
-├── templates
-├── files
+## 1️⃣ Instalar Ansible
 
-Descrição dos diretórios:
+Ubuntu / Debian
 
-- **playbook.yml** → playbook principal responsável por orquestrar a instalação
-- **hosts** → inventário com os servidores gerenciados
-- **group_vars** → variáveis utilizadas nos playbooks
-- **roles** → modularização das tarefas do Ansible
-- **templates** → arquivos de configuração gerados dinamicamente
-- **files** → arquivos utilizados durante a automação
+
+sudo apt update
+sudo apt install ansible -y
+
 
 ---
 
-# O que este projeto automatiza
+## 2️⃣ Configurar o inventário
 
-- instalação de dependências
-- configuração do servidor web
-- configuração do banco de dados
-- deploy do WordPress
-- configuração das variáveis da aplicação
+[wordpress]
+IP_DO_SERVIDOR_WEB ansible_user=ubuntu
 
----
+[mysql]
+IP_DO_SERVIDOR_DB ansible_user=ubuntu
 
-# Pré-requisitos
-
-Para executar o projeto é necessário:
-
-- Linux
-- Ansible instalado
-- acesso SSH aos servidores
-- máquinas virtuais configuradas
 
 ---
 
-# Execução do playbook
+## 3️⃣ Configurar variáveis
 
-Edite o arquivo `hosts` com os endereços dos servidores e execute:
+Foi incluído um arquivo de exemplo:
+
+
+group_vars/all.example.yml
+
+
+Crie o arquivo real baseado nele:
+
+
+cp group_vars/all.example.yml group_vars/all.yml
+
+
+---
+
+## 4️⃣ Executar o playbook
 
 
 ansible-playbook -i hosts playbook.yml
 
 
----
+O Ansible irá automaticamente:
 
-# Aprendizados com este projeto
-
-Durante o desenvolvimento deste projeto foram aplicados conceitos importantes de DevOps:
-
-- automação de infraestrutura
-- gerenciamento de configuração
-- reutilização de tarefas com roles
-- parametrização com variáveis
-- uso de templates para configuração dinâmica
+- instalar Apache
+- instalar MySQL
+- criar banco de dados
+- instalar WordPress
+- configurar VirtualHost
+- conectar WordPress ao banco remoto
 
 ---
 
-# Referência
+# 🔐 Segurança
 
-Curso: Trilha DevOps
-Ansible: implementando sua infraestrutura como código – Alura
+Arquivos contendo **dados sensíveis**, como senhas ou credenciais, foram removidos do repositório.
+
+Para execução do projeto, utilize o arquivo:
+
+
+group_vars/all.example.yml
+
+
+Criando sua própria versão local com as credenciais necessárias.
+
+---
+
+# 🎯 Conceitos demonstrados
+
+Este projeto demonstra conhecimentos em:
+
+- Automação de infraestrutura com Ansible
+- Organização de projetos utilizando **Roles**
+- Separação de serviços em múltiplos servidores
+- Uso de **templates Jinja2**
+- Configuração automatizada de aplicações
+- Infrastructure as Code
+
+---
+
+# 👨‍💻 Autor
+
+**Israel Kunn**
+
+Estudante de **DevOps, Linux e Infraestrutura como Código**, focado em automação de ambientes e provisionamento de infraestrutura.
